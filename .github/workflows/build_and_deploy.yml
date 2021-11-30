@@ -17,10 +17,10 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v2
-      - name: 'Setup Java 8'
+      - name: 'Setup Java 11'
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 11
       - name: 'Build JAR'
         run: |
           mvn clean package
@@ -107,7 +107,7 @@ jobs:
           dir
           mkdir build
           cd build
-          native-image --no-fallback -H:Name=$APP_NAME -jar ../$APP_NAME.jar --verbose --allow-incomplete-classpath -H:ReflectionConfigurationFiles=../graalvm/reflectconfig -H:Log=registerResource:
+          native-image --no-fallback -H:Name=${{env.APP_NAME}} -jar ../${{env.APP_NAME}}.jar --verbose --allow-incomplete-classpath -H:ReflectionConfigurationFiles=../graalvm/reflectconfig -H:Log=registerResource:
           dir
         shell: cmd
       - name: Prepare release files
