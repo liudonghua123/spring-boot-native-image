@@ -59,10 +59,13 @@ jobs:
         include:
           - os: 'ubuntu-latest'
             label: 'linux'
+            executable_extension: ''
           - os: 'macos-latest'
             label: 'macos'
+            executable_extension: ''
           - os: 'windows-latest'
             label: 'windows'
+            executable_extension: '.exe'
     runs-on: ${{matrix.os}}
     steps:
       - name: 'Checkout'
@@ -95,24 +98,18 @@ jobs:
       - name: 'Build Native Image on non-windows'
         if: matrix.os != 'windows-latest'
         run: |
-          pwd && ls -l
-          mkdir build
-          cd build
-          native-image --no-fallback -H:Name=$APP_NAME -jar ../$APP_NAME.jar --verbose --allow-incomplete-classpath -H:ReflectionConfigurationFiles=../graalvm/reflectconfig -H:Log=registerResource:
-          pwd && ls -l
+          mvn clean package -P native -DskipTests
+          ls -l target
       - name: 'Build Native Image on windows'
         if: matrix.os == 'windows-latest'
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-          dir
-          mkdir build
-          cd build
-          native-image --no-fallback -H:Name=${{env.APP_NAME}} -jar ../${{env.APP_NAME}}.jar --verbose --allow-incomplete-classpath -H:ReflectionConfigurationFiles=../graalvm/reflectconfig -H:Log=registerResource:
-          dir
+          mvn clean package -P native -DskipTests
+          dir target
         shell: cmd
       - name: Prepare release files
         run: |
-          7z a -tzip $APP_NAME-${{matrix.label}}-${{ steps.environment.outputs.PROJECT_VERSION }}.zip -r ./build/*
+          7z a -tzip $APP_NAME-${{matrix.label}}-${{ steps.environment.outputs.PROJECT_VERSION }}.zip -r ./target/${APP_NAME}${{matrix.executable_extension}}
         shell: bash
       - name: 'Publish binary to release'
         uses: xresloader/upload-to-github-release@v1
