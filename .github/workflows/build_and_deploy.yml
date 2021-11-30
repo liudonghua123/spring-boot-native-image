@@ -48,6 +48,7 @@ jobs:
           file: target/${{ steps.environment.outputs.JAR_FILENAME }}
           tags: true
           draft: false
+          overwrite: true
 
   build-native-image:
     name: 'Build native Image'
@@ -119,3 +120,4 @@ jobs:
           file: ${{env.APP_NAME}}-${{matrix.label}}-${{ steps.environment.outputs.PROJECT_VERSION }}.zip
           tags: true
           draft: false
+          overwrite: true
