@@ -104,10 +104,16 @@ jobs:
       - name: 'Build Native Image on windows'
         if: matrix.os == 'windows-latest'
         run: |
+          dir target
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
           mvn clean package -P native -DskipTests
           dir target
         shell: cmd
+      - name: Edit binary resources
+        if: matrix.os == 'windows-latest'
+        run: |
+          ./resources/rcedit-x64.exe target/${APP_NAME}${{matrix.executable_extension}} --set-icon resources/app_icon.ico --set-file-version ${{ steps.environment.outputs.PROJECT_VERSION }} --set-product-version ${{ steps.environment.outputs.PROJECT_VERSION }}  --set-version-string ProductName ${{env.APP_NAME}} --set-version-string LegalCopyright MIT
+        shell: bash
       - name: Prepare release files
         run: |
           7z a -tzip $APP_NAME-${{matrix.label}}-${{ steps.environment.outputs.PROJECT_VERSION }}.zip -r ./target/${APP_NAME}${{matrix.executable_extension}}
