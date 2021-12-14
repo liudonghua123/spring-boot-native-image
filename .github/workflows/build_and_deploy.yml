@@ -104,12 +104,14 @@ jobs:
       - name: 'Build Native Image on windows'
         if: matrix.os == 'windows-latest'
         run: |
-          # echo "init vs2019 x64 environment"
-          # call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          echo "init vs2019 x64 environment"
+          # Visual Studio Enterprise 2019 is installed in github virtual-environments
+          # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#visual-studio-enterprise-2019
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           echo "build native image"
           call mvn clean package -P native -DskipTests
           echo "edit binary resources"
-          ".\resources\rcedit-x64.exe" target/${{env.APP_NAME}}${{matrix.executable_extension}} --set-icon resources/app_icon.ico --set-file-version ${{ steps.environment.outputs.PROJECT_VERSION }} --set-product-version ${{ steps.environment.outputs.PROJECT_VERSION }}  --set-version-string ProductName ${{env.APP_NAME}} --set-version-string LegalCopyright MIT
+          "./resources/rcedit-x64.exe" target/${{env.APP_NAME}}${{matrix.executable_extension}} --set-icon resources/app_icon.ico --set-file-version ${{ steps.environment.outputs.PROJECT_VERSION }} --set-product-version ${{ steps.environment.outputs.PROJECT_VERSION }}  --set-version-string ProductName ${{env.APP_NAME}} --set-version-string LegalCopyright MIT
           echo "check target outputs"
           dir target
         shell: cmd
