@@ -84,10 +84,10 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -l
         shell: bash
-      - name: 'Set up Visual C Build Tools Workload for Visual Studio 2019 Build Tools on Windows'
-        if: matrix.os == 'windows-latest'
-        run: |
-          choco install visualstudio2019-workload-vctools
+      # - name: 'Set up Visual C Build Tools Workload for Visual Studio 2019 Build Tools on Windows'
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     choco install visualstudio2019-workload-vctools
       - name: 'Setup GraalVM Environment'
         uses: ayltai/setup-graalvm@v1
         with:
@@ -104,8 +104,8 @@ jobs:
       - name: 'Build Native Image on windows'
         if: matrix.os == 'windows-latest'
         run: |
-          echo "init vs2019 x64 environment"
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          # echo "init vs2019 x64 environment"
+          # call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
           echo "build native image"
           call mvn clean package -P native -DskipTests
           echo "edit binary resources"
