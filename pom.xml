@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.liudonghua.tutorials</groupId>
 	<artifactId>spring-boot-native-image</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>spring-boot-native-image</name>
 	<description>Tutorial project for Spring Boot using Graalvm native-image</description>
 	<properties>
